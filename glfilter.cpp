@@ -2,6 +2,7 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLShader>
 #include <QOpenGLTexture>
+#include <QOpenGLFramebufferObject>
 
 GLFilter::~GLFilter()
 {
@@ -9,13 +10,19 @@ GLFilter::~GLFilter()
     vbo.destroy();
     delete texture;
     delete program;
+    delete fbo;
     doneCurrent();
 }
 
 void GLFilter::setImage(QImage &img)
 {
+    makeCurrent();
     delete texture;
     texture = new QOpenGLTexture(img);
+
+    if (fbo) delete fbo;
+    fbo = new QOpenGLFramebufferObject(img.size());
+    doneCurrent();
 }
 
 bool GLFilter::setShader(QString &fileName)
@@ -32,6 +39,19 @@ bool GLFilter::setShader(QString &fileName)
         return true;
     }
     return false;
+}
+
+QImage GLFilter::grabImage()
+{
+    makeCurrent();
+    fbo->bind();
+    auto size = fbo->size();
+    resizeGL(size.width(), size.height());
+    paintGL();
+    auto img = fbo->toImage();
+    fbo->release();
+    doneCurrent();
+    return img;
 }
 
 const char *vertexShader = R"(
@@ -85,8 +105,7 @@ void GLFilter::initializeGL()
 
 void GLFilter::resizeGL(int width, int height)
 {
-    int side = qMin(width, height);
-    glViewport((width - side) / 2, (height - side) / 2, side, side);
+    glViewport(0, 0, width, height);
 }
 
 void GLFilter::paintGL()

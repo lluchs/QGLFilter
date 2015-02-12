@@ -49,7 +49,7 @@ void MainWindow::selectImage()
 
 void MainWindow::saveResult()
 {
-    QImage result = glfilter->grabFramebuffer();
+    QImage result = glfilter->grabImage();
     auto fileName = QFileDialog::getSaveFileName(this, "Save Image", "", "Image Files (*.png *.jpg *.bmp)");
     if (result.save(fileName)) {
         ui->statusBar->showMessage(QString("Saved to ") + fileName);

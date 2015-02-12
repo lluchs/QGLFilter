@@ -6,6 +6,7 @@
 #include <QOpenGLBuffer>
 
 QT_FORWARD_DECLARE_CLASS(QOpenGLShaderProgram)
+QT_FORWARD_DECLARE_CLASS(QOpenGLShader)
 QT_FORWARD_DECLARE_CLASS(QOpenGLTexture)
 
 class GLFilter : public QOpenGLWidget, protected QOpenGLFunctions
@@ -15,6 +16,7 @@ public:
     ~GLFilter();
 
     void setImage(QImage &img);
+    bool setShader(QString &fileName);
 
 protected:
     void initializeGL();
@@ -24,6 +26,7 @@ protected:
 private:
     QOpenGLTexture *texture;
     QOpenGLShaderProgram *program;
+    QOpenGLShader *fragmentShader;
     QOpenGLBuffer vbo;
 
     // Shader parameter positions

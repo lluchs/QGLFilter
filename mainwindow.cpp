@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     glfilter = new GLFilter(this);
     ui->container->addWidget(glfilter);
 
+    connect(ui->selectShaderButton, SIGNAL(clicked()), this, SLOT(selectShader()));
     connect(ui->selectImageButton, SIGNAL(clicked()), this, SLOT(selectImage()));
     connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveResult()));
 }
@@ -21,6 +22,16 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::selectShader()
+{
+    auto fileName = QFileDialog::getOpenFileName(this, "Open Shader", "", "Fragment Shader (*.frag)");
+
+    if (glfilter->setShader(fileName))
+        ui->statusBar->showMessage(fileName);
+    else
+        QMessageBox::critical(this, "Loading Error", "Could not load shader file.");
 }
 
 void MainWindow::selectImage()

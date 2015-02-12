@@ -21,6 +21,13 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
+       <widget class="QPushButton" name="selectShaderButton">
+        <property name="text">
+         <string>Set shader...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="selectImageButton">
         <property name="text">
          <string>Select image...</string>

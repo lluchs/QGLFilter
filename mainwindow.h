@@ -18,6 +18,7 @@ public:
     ~MainWindow();
 
 private slots:
+    void selectShader();
     void selectImage();
     void saveResult();
 

@@ -19,6 +19,7 @@ public:
     void setImage(QImage &img);
     bool setShader(QString &fileName);
     QImage grabImage();
+    void setUniforms(QMap<QString, float> &uniforms);
 
 protected:
     void initializeGL();
@@ -31,6 +32,8 @@ private:
     QOpenGLShader *fragmentShader;
     QOpenGLFramebufferObject *fbo;
     QOpenGLBuffer vbo;
+
+    QMap<QString, float> uniforms;
 
     // Shader parameter positions
     const int SHADER_POSITION_ATTRIBUTE = 0;

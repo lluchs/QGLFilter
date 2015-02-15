@@ -54,6 +54,11 @@ QImage GLFilter::grabImage()
     return img;
 }
 
+void GLFilter::setUniforms(QMap<QString, float> &uniforms)
+{
+    this->uniforms = uniforms;
+}
+
 const char *vertexShader = R"(
 in vec2 position;
 out varying vec2 texpos;
@@ -110,6 +115,10 @@ void GLFilter::resizeGL(int width, int height)
 
 void GLFilter::paintGL()
 {
+    for (auto uniformName : uniforms.keys()) {
+        QByteArray name = uniformName.toUtf8();
+        program->setUniformValue(name.data(), uniforms[uniformName]);
+    }
     program->enableAttributeArray(SHADER_POSITION_ATTRIBUTE);
     program->setAttributeBuffer(SHADER_POSITION_ATTRIBUTE, GL_FLOAT, 0, 2);
     texture->bind();
